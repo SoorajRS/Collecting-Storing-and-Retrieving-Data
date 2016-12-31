@@ -1,0 +1,133 @@
+---
+title: "Shetty_S_10"
+author: "Sooraj Shetty"
+date: "11/14/2016"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Assignment 10
+
+Reading the birdstrikes database
+```{r}
+bs <- read.csv("Bird Strikes.csv",sep = ",")
+head(bs)
+```
+
+Adding additional columns for the data base
+```{r}
+bs$AircraftNo<-seq.int(nrow(bs))
+bs$AirportNo<-seq.int(nrow(bs))
+bs$LocENo<-seq.int(nrow(bs))
+bs$CostNo<-seq.int(nrow(bs))
+bs$EffectONo<-seq.int(nrow(bs))
+bs$ConditionNo<-seq.int(nrow(bs))
+bs$EffectNo<-seq.int(nrow(bs))
+```
+
+Creating data frames for the database
+Data frame for aircrafts
+```{r}
+Aircraft <- data.frame(bs$AircraftNo,bs$Aircraft..Type,bs$Aircraft..Airline.Operator,bs$Aircraft..Make.Model,bs$Aircraft..Number.of.engines.,bs$Altitude.bin)
+```
+
+Data frame for airports
+```{r}
+Airport <- data.frame(bs$AirportNo,bs$Airport..Name,bs$Origin.State)
+```
+
+Data frame for location enroute
+```{r}
+LocationEnroute <- data.frame(bs$LocENo,bs$Location..Nearby.if.en.route)
+```
+
+Data frame for effect (wildlife)
+```{r}
+EffectW <- data.frame(bs$EffectNo,bs$Wildlife..Number.struck,bs$Wildlife..Size,bs$Wildlife..Species,bs$Remains.of.wildlife.collected.,bs$Record.ID)
+```
+
+Data frame for effect (flights)
+```{r}
+EffectF <- data.frame(bs$Record.ID,bs$Effect..Impact.to.flight,bs$EffectONo,bs$When..Phase.of.flight,bs$LocENo,bs$FlightDate,bs$Effect..Indicated.Damage,bs$Speed..IAS..in.knots,bs$Feet.above.ground,bs$Remarks,bs$When..Time..HHMM,bs$Reported..Date,bs$Pilot.warned.of.birds.or.wildlife.,bs$ConditionNo)
+```
+
+Data frame for effect (other)
+```{r}
+EffectO <- data.frame(bs$EffectONo,bs$Effect..Other)
+```
+
+Data frame for cost
+```{r}
+Cost <- data.frame(bs$CostNo,bs$Record.ID,bs$Cost..Repair..inflation.adj.,bs$Cost..Total..)
+```
+
+Data frame for conditions
+```{r}
+Condition <- data.frame(bs$ConditionNo,bs$Conditions..Sky,bs$Conditions..Precipitation)
+```
+
+Calling necessary libraries
+```{r}
+library(sqldf)
+library(proto)
+library(gsubfn)
+```
+
+Connecting to SQLite
+```{r}
+db <- dbConnect(SQLite(), dbname="bs.sqlite")
+```
+
+Creating tables for the database
+```{r}
+dbWriteTable(conn = db, name = "Aircraft", value = Aircraft, row.names = FALSE)
+dbWriteTable(conn = db, name = "Airport", value = Airport, row.names = FALSE)
+dbWriteTable(conn = db, name = "LocationEnroute", value = LocationEnroute, row.names = FALSE)
+dbWriteTable(conn = db, name = "EffectW", value = EffectW, row.names = FALSE)
+dbWriteTable(conn = db, name = "EffectF", value = EffectF, row.names = FALSE)
+dbWriteTable(conn = db, name = "EffectO", value = EffectO, row.names = FALSE)
+dbWriteTable(conn = db, name = "Cost", value = Cost, row.names = FALSE)
+dbWriteTable(conn = db, name = "Condition", value = Condition, row.names = FALSE)
+```
+
+Listing tables in database
+```{r}
+dbListTables(db)
+```
+
+Listing columns in a table in the database
+```{r}
+dbListFields(db, "Aircraft")
+dbListFields(db, "Airport")
+dbListFields(db, "Condition")
+dbListFields(db, "Cost")
+dbListFields(db, "EffectF")
+dbListFields(db, "EffectO")
+dbListFields(db, "EffectW")
+dbListFields(db, "LocationEnroute")
+```
+
+Fetching data from a table in the database
+```{r}
+dbReadTable(db, "Aircraft")
+dbReadTable(db, "Airport")
+dbReadTable(db, "Condition")
+dbReadTable(db, "Cost")
+dbReadTable(db, "EffectF")
+dbReadTable(db, "EffectO")
+dbReadTable(db, "EffectW")
+dbReadTable(db, "LocationEnroute")
+```
+
+Select statement to display data from LocationEnroute table
+```{r}
+dbGetQuery(conn = db, "SELECT * FROM LocationEnroute")
+```
+
+Select statement to display data from EffectF table
+```{r}
+dbGetQuery(conn = db, "SELECT * FROM EffectF")
+```
