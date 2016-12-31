@@ -1,0 +1,78 @@
+---
+title: "Shetty_S_6A"
+author: "Sooraj Shetty"
+date: "10/24/2016"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Assignment 6A - Web Scraping
+
+# Question 1
+3 web scraping toolkits are - "rvest", "RCurl and XML" & "import.io"
+
+Selecting the website - when searced for restaurants in Yellow Pages website
+```{r}
+url <- "http://www.yellowpages.com/search?search_terms=restaurant&geo_location_terms=Boston%2C+MA"
+```
+I am using this website to extract information like name and phone number of the restaurants in Boston area, in a tabukar form.
+
+# Question 2
+[A] rvest
+```{r}
+rm(list=ls())
+
+library(rvest)
+library(xml2)
+library(stringr)
+
+s <- read_html(url) #url into html
+s %>% html_nodes("business-name") %>% html_text() #selecting business name
+n <- s %>% html_nodes("business-name") %>% html_text()
+n <- trimws(b)
+
+s %>% html_nodes("phones") %>% html_text() #selecting phone numbers
+p <- s %>% html_nodes("phones") %>% html_text()%>% str_trim()
+
+yprv <- cbind(n,p) #web data into data frame
+head(yprv) #brief view of the data
+```
+
+[B] RCurl and XML package
+```{r}
+library(XML)
+library(bitops)
+library(RCurl)
+
+url <- "http://www.yellowpages.com/search?search_terms=restaurant&geo_location_terms=Boston%2C+MA"
+url <- getURL(url)
+url <- htmlParse(url) #htmlparse for selecting nodes
+
+bname <- getNodeSet(url,'//*[contains(concat( " ", @class, " " ), concat( "
+", \"business-name", " " ))]//span/text()') #exttracting business name
+bname <- sapply(name, xmlValue) #converting to character value
+
+ph <- getNodeSet(url,'//*[contains(concat( " ", @class, " " ), concat(
+" ", "phones", " " ))]/text()')
+ph <- sapply(phone2,xmlValue)
+ph <- trimws(phone2,which = c("both"))
+yprc <- cbind(bname,ph) #combining data into data frame
+head(yprc)
+```
+
+[C] import.io
+Check the following picture
+![Caption for the picture.](/Users/soorajshetty/R/import.io.png)
+
+# Question 3
+Comments after using the web scrapers
+
+1) import.io was the easiest to collect information without writing any script. Entire information was available including rec=views, etc. However, I was able to use it on trail basis. Hence, to use it extensivlely I might have to pay for it. Other two tools do not show this problem.
+
+2) In terms of coding RCurl seemed more complex than rvest. Codes using rvest are easier to read too. Also conversion to dataframe is easier.
+
+Easiest to use -> import.io
+Recommended to use -> rvest
