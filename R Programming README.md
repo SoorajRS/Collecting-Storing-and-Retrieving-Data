@@ -4,6 +4,7 @@ Learning Objectives -
 * control conditional and iterative execution
 * create data frames and vectors
 * make R code readable
+
 Tasks - 
   1. Loading the data file into an appropriate data object of your choice. This includes figuring out how to deal with missing values. 
   2. Writing a function called TotalNumDelays(Carrier) that finds and returns the total number of delays of a carrier. 
