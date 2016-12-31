@@ -34,10 +34,10 @@ Set all the Configuration details to authorize your application to access Twitte
 requestURL <- "https://api.twitter.com/oauth/request_token"
 accessURL <- "https://api.twitter.com/oauth/access_token"
 authURL <- "https://api.twitter.com/oauth/authorize"
-consumerKey <- "VfrVSIEPPiBU9Y1g8FI9gwIfR"
-consumerSecret <- "AFbnE57c2mOIO74fP1qJNeq4AAgvBQUdogcL88BpCvN7Xihuzg"
-oauth_token <- "795830602201255936-FjsxAqRLFotVcjZOruP5gBbyeuoIC1k"
-oauth_token_secret <- "	RHj85HAeu1E0tuyHzS5rDI0ZDjtiAn4p1TYY7QbsQlPyQ"
+consumerKey <- "************************************"
+consumerSecret <- "************************************"
+oauth_token <- "************************************"
+oauth_token_secret <- "************************************"
 my_oauth <- OAuthFactory$new(   consumerKey=consumerKey,
                             consumerSecret=consumerSecret, 
                                 requestURL=requestURL,
