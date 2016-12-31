@@ -1,5 +1,5 @@
 ---
-title: "Shetty_S_10"
+title: "7.Relational Database Creation & Loading"
 author: "Sooraj Shetty"
 date: "11/14/2016"
 output: pdf_document
@@ -9,7 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Assignment 10
+## 7.Relational Database Creation & Loading
 
 Reading the birdstrikes database
 ```{r}
