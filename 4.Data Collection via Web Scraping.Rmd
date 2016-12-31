@@ -1,5 +1,5 @@
 ---
-title: "Shetty_S_6A"
+title: "Data Collection via Web Scraping"
 author: "Sooraj Shetty"
 date: "10/24/2016"
 output: pdf_document
@@ -9,7 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Assignment 6A - Web Scraping
+## 4.Data Collection via Web Scraping
 
 # Question 1
 3 web scraping toolkits are - "rvest", "RCurl and XML" & "import.io"
