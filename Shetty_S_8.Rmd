@@ -1,0 +1,58 @@
+---
+title: "Assignment 8"
+author: "Sooraj Shetty"
+date: "11/7/2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Loading libraries
+```{r}
+library(RCurl)
+library(ROAuth)
+library(streamR)
+library(twitteR)
+```
+
+Download the certificate needed for authentication. This creates a certificate file on the desktop
+```{r}
+download.file(url="http://curl.haxx.se/ca/cacert.pem", destfile="cacert.pem")                                   
+```
+
+Create a file to collect all the Twitter JSon data received from the API call
+```{r}
+# Configuration for twitter
+outFile <- "tweets_sample.json"
+```
+
+Set all the Configuration details to authorize your application to access Twitter data.
+```{r}
+#Twitter configuration
+requestURL <- "https://api.twitter.com/oauth/request_token"
+accessURL <- "https://api.twitter.com/oauth/access_token"
+authURL <- "https://api.twitter.com/oauth/authorize"
+consumerKey <- "VfrVSIEPPiBU9Y1g8FI9gwIfR"
+consumerSecret <- "AFbnE57c2mOIO74fP1qJNeq4AAgvBQUdogcL88BpCvN7Xihuzg"
+oauth_token <- "795830602201255936-FjsxAqRLFotVcjZOruP5gBbyeuoIC1k"
+oauth_token_secret <- "	RHj85HAeu1E0tuyHzS5rDI0ZDjtiAn4p1TYY7QbsQlPyQ"
+my_oauth <- OAuthFactory$new(   consumerKey=consumerKey,
+                            consumerSecret=consumerSecret, 
+                                requestURL=requestURL,
+                                accessURL=accessURL,
+                                    authURL=authURL)    
+my_oauth$handshake(cainfo="cacert.pem")
+
+setup_twitter_oauth(consumerKey, consumerSecret, oauth_token, oauth_token_secret)
+```
+
+Reading the tweets
+```{r}
+sampleStream( file=outFile, oauth=my_oauth )
+follow   <- ""    # TwitterIDs (not screennames!) of peple to follow
+track    <- "Boston,Northeastern"  # Comma-separated list of words to filter for
+
+filterStream( file.name=outFile, follow=follow, track=track, locations=location, oauth=my_oauth, timeout=10800)
+```
