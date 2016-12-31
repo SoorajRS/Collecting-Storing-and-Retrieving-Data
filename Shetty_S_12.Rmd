@@ -1,0 +1,56 @@
+---
+title: "S_Shetty_12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Reading the Bird Strikes file into BS
+```{r}
+library(mongolite)
+BS <- read.csv("Bird Strikes.csv")
+head(BS)
+```
+
+Inserting the data in MongoDB
+```{r}
+mongoBS <- mongo("BS")
+mongoBS$insert(BS)
+```
+
+Exporting the file named BS.txt
+```{r}
+mongoBS$export(file("BS.txt"))
+```
+
+Obtaining distinct airport names
+```{r}
+distinct <- mongoBS$distinct("AirportName")
+head(distinct)
+```
+
+Total rows with origin state as New Jersey
+```{r}
+J <- mongoBS$count('{"OriginState":"New Jersey"}')
+J
+```
+
+Getting data with ConditionsPreceipitation is fog and has RecordID in desceding order.
+```{r}
+CPF <- mongoBS$find('{"ConditionsPrecipitation":"Fog"}', sort= '{"RecordID":-1}')
+head(CPF)
+```
+
+For AircraftAirlineOROperator as American Airlines fetching columns RecordID, OriginState, AircraftAirlineOROperator and AirportName
+```{r}
+AA <- mongoBS$find('{"AircraftAirlineOROperator":"AMERICAN AIRLINES"}', fields = '{"RecordID":1, "OriginState":1, "AircraftAirlineOROperator":1, "AirportName":1}')
+head(AA)
+```
+
+For AircraftAirlineOROperator as Continental Airlines fetching columns RecordID, OriginState, AircraftAirlineOROperator and AirportName
+```{r}
+CA<- mongoBS$find('{"AircraftAirlineOROperator":"CONTINENTAL AIRLINES"}', fields = '{"RecordID":1, "OriginState":1, "AircraftAirlineOROperator":1, "AirportName":1}')
+head(CA)
+```
